@@ -9,8 +9,10 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
-          events: '/fetch_events'
-
+          events: '/fetch_events',
+          eventClick: function(calEvent, jsEvent, view) {
+            window.location.href = "/edit_event/" + calEvent.event.id;
+            }
         });
         calendar.render();
       });

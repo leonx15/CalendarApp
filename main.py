@@ -1,4 +1,3 @@
-# main.py
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from app import app, db
@@ -61,7 +60,8 @@ def fetch_events():
     events = Event.query.filter_by(owner_id=current_user.id).all()
     events_data = [
         {
-            'title': 'Event at ' + event.location.name,
+            'id': event.id,
+            'title': 'Dyżur w ' + event.location.name,
             'start': event.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
             'end': event.end_time.strftime('%Y-%m-%dT%H:%M:%S')
         }
@@ -69,3 +69,22 @@ def fetch_events():
     ]
     return json.dumps(events_data)
 
+@app.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def edit_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # Upewnij się, że użytkownik ma prawo edytować to wydarzenie
+    if event.owner_id != current_user.id:
+        flash('You do not have permission to edit this event.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    form = EventForm(obj=event)  # Wypełnij formularz danymi z wydarzenia
+
+    if form.validate_on_submit():
+        form.populate_obj(event)  # Aktualizuj obiekt wydarzenia danymi z formularza
+        db.session.commit()
+        flash('Event updated successfully.', 'success')
+        return redirect(url_for('calendar'))
+
+    return render_template('edit_event.html', form=form)
