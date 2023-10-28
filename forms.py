@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, EqualTo
 from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -26,5 +26,8 @@ class WorkplaceForm(FlaskForm):
 class EventForm(FlaskForm):
     start_time = DateTimeLocalField('Start Time', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     end_time = DateTimeLocalField('End Time', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
-    location = QuerySelectField('Location', query_factory=lambda: Workplace.query.filter_by(user_id=current_user.id), allow_blank=False, get_label='name')
+    workplace = QuerySelectField('Workplace', query_factory=lambda: Workplace.query.filter_by(user_id=current_user.id), allow_blank=False, get_label='name')
     submit = SubmitField('Add Event')
+
+class ManageUserForm(FlaskForm):
+    role = SelectField('Role', choices=[('Guest', 'Guest'), ('Admin', 'Admin'), ('User', 'User')])

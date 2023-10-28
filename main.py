@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from app import app, db
-from forms import WorkplaceForm, EventForm
-from models import Workplace, Event
+from forms import WorkplaceForm, EventForm, ManageUserForm
+from models import Workplace, Event, User
+from utils import requires_role
 import json
 
 @app.route('/dashboard/')
@@ -37,7 +38,7 @@ def delete_workplace(workplace_id):
 @app.route('/calendar')
 @login_required
 def calendar():
-    events = Event.query.filter_by(owner_id=current_user.id).all()
+    events = Event.query.filter_by(user_id=current_user.id).all()
     return render_template('calendar.html', events=events)
 
 
@@ -46,10 +47,10 @@ def calendar():
 def add_event():
     form = EventForm()
     if form.validate_on_submit():
-        event = Event(start_time=form.start_time.data, end_time=form.end_time.data, location=form.location.data, user=current_user)
+        event = Event(start_time=form.start_time.data, end_time=form.end_time.data, Workplace=form.workplace.data, user=current_user)
         db.session.add(event)
         db.session.commit()
-        flash('Event added successfully!', 'success')
+        flash('Dyżur został dodany!', 'success')
         return redirect(url_for('calendar'))
     return render_template('add_event.html', form=form)
 
@@ -57,11 +58,11 @@ def add_event():
 @app.route('/fetch_events')
 @login_required
 def fetch_events():
-    events = Event.query.filter_by(owner_id=current_user.id).all()
+    events = Event.query.filter_by(user_id=current_user.id).all()
     events_data = [
         {
             'id': event.id,
-            'title': 'Dyżur w ' + event.location.name,
+            'title': 'Dyżur w ' + event.Workplace.name,
             'start': event.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
             'end': event.end_time.strftime('%Y-%m-%dT%H:%M:%S')
         }
@@ -75,8 +76,8 @@ def edit_event(event_id):
     event = Event.query.get_or_404(event_id)
 
     # Upewnij się, że użytkownik ma prawo edytować to wydarzenie
-    if event.owner_id != current_user.id:
-        flash('You do not have permission to edit this event.', 'danger')
+    if event.user_id != current_user.id:
+        flash('NIe masz uprawnień do zmain w tym dyżurze.', 'danger')
         return redirect(url_for('dashboard'))
 
     form = EventForm(obj=event)  # Wypełnij formularz danymi z wydarzenia
@@ -84,7 +85,42 @@ def edit_event(event_id):
     if form.validate_on_submit():
         form.populate_obj(event)  # Aktualizuj obiekt wydarzenia danymi z formularza
         db.session.commit()
-        flash('Event updated successfully.', 'success')
+        flash('Dyżur został zaktualizowany.', 'success')
         return redirect(url_for('calendar'))
 
-    return render_template('edit_event.html', form=form)
+    return render_template('edit_event.html', form=form, event=event)
+
+
+@app.route('/delete_event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.user_id != current_user.id:  # upewnij się, że tylko właściciel może usunąć wydarzenie
+        abort(403)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Wydarzenie zostało usunięte.', 'success')
+    return redirect(url_for('calendar'))
+
+
+@app.route('/manage_users', methods=['GET', 'POST'])
+@login_required
+def manage_users():
+    if current_user.role != "Admin":
+        return redirect(url_for('dashboard'))
+
+    users = User.query.all()
+    return render_template('manage_users.html', users=users, form=ManageUserForm())
+
+
+@app.route('/change_user_role/<int:user_id>', methods=['POST'])
+@login_required
+@requires_role('Admin')
+def change_user_role(user_id):
+    form = ManageUserForm()
+    user = User.query.get(user_id)
+    if user and form.validate_on_submit():
+        user.role = form.role.data
+        db.session.commit()
+        flash('Role changed successfully.', 'success')
+    return redirect(url_for('manage_users'))

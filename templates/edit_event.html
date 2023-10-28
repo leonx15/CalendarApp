@@ -6,7 +6,19 @@
         {{ form.hidden_tag() }}
         {{ form.start_time.label }} {{ form.start_time() }}<br>
         {{ form.end_time.label }} {{ form.end_time() }}<br>
-        {{ form.location.label }} {{ form.location() }}<br>
+        {{ form.workplace.label }} {{ form.workplace() }}<br>
         <input type="submit" value="Update">
+
     </form>
+
+    <script>
+    function confirmDelete() {
+        return confirm("Czy na pewno chcesz usunąć to wydarzenie?");
+    }
+    </script>
+
+    <a href="{{ url_for('delete_event', event_id=event.id) }}" class="btn btn-danger" onclick="return confirmDelete()">Usuń wydarzenie</a>
+
+
+
 {% endblock %}

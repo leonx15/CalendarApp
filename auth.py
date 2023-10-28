@@ -25,10 +25,17 @@ def login():
         if user:
             hashed_password, _ = hash_password(form.password.data, user.salt)
             if hashed_password == user.password:
-                login_user(user)
-                return redirect(url_for('dashboard'))
-        flash('Invalid credentials')
+                if user.role == "Guest":
+                    flash('Your account is in Guest mode and cannot be used to log in.', 'danger')
+                else:
+                    login_user(user)
+                    return redirect(url_for('dashboard'))
+            else:
+                flash('Invalid credentials')
+        else:
+            flash('Invalid credentials')
     return render_template('login.html', form=form)
+
 
 @app.route('/logout/')
 @login_required

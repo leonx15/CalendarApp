@@ -2,7 +2,7 @@
 
 class Config:
     SECRET_KEY = 'mysecretkey'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///users.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///apps_data_123.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Opcjonalnie, aby unikać ostrzeżeń
 
     # Jeśli masz inne ustawienia konfiguracyjne, które chcesz dodać, możesz je umieścić tutaj

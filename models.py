@@ -7,6 +7,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     salt = db.Column(db.LargeBinary, nullable=False)
+    role = db.Column(db.String(50), default="Guest")
     workplaces = db.relationship('Workplace', backref='owner', lazy=True)
 
 
@@ -21,8 +22,8 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    location_id = db.Column(db.Integer, db.ForeignKey('workplace.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    workplace_id = db.Column(db.Integer, db.ForeignKey('workplace.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    location = db.relationship('Workplace')
+    Workplace = db.relationship('Workplace')
     user = db.relationship('User')

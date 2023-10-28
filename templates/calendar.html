@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Kalendarz</h2>
+<a href="{{ url_for('add_event') }}" class="btn btn-primary">Dodaj wydarzenie</a>
 <div id='calendar'></div>
 
 <script>
@@ -8,6 +9,7 @@
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+          locale: 'pl',
           initialView: 'dayGridMonth',
           events: '/fetch_events',
           eventClick: function(calEvent, jsEvent, view) {
