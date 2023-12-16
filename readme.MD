@@ -1,4 +1,4 @@
-# Small self skilling project in Python (Flask)
+# Small self-skilling project in Python (Flask)
 
 
 
