@@ -22,7 +22,7 @@ def login():
         else:
             flash('Invalid email or password')
 
-    return render_template('login.html')
+    return render_template('auth/login.html')
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,7 +44,7 @@ def register():
         else:
             flash('Email is already in use.')
 
-    return render_template('register.html')
+    return render_template('auth/register.html')
 
 @auth.route('/logout')
 @login_required

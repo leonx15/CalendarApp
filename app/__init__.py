@@ -21,9 +21,12 @@ from app.models.user import User  # Assuming you have a user model in the models
 # Import and register Blueprints
 from app.blueprints.auth import auth as auth_blueprint
 from app.blueprints.main import main as main_blueprint
+from app.blueprints.calendar import calendar as calendar_blueprint
 
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(main_blueprint)
+app.register_blueprint(calendar_blueprint, url_prefix='/calendar')
+
 
 # Setup the login manager user loader
 @login_manager.user_loader
