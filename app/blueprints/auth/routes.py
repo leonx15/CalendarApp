@@ -19,7 +19,7 @@ def login():
             login_user(user)
             return redirect(url_for('main.home'))
         else:
-            flash('Invalid email or password')
+            flash('Nieprawidłowy login lub hasło.', 'danger')
 
     return render_template('auth/login.html')
 
@@ -41,7 +41,7 @@ def register():
             db.session.commit()
             return redirect(url_for('auth.login'))
         else:
-            flash('Email is already in use.')
+            flash('E-mail jest już zarejestrowany!', 'danger')
 
     return render_template('auth/register.html')
 
