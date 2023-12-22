@@ -17,3 +17,15 @@ class Workplace(db.Model):
 
     def __repr__(self):
         return f'<Workplace {self.name}>'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'street': self.street,
+            'house_number': self.house_number,
+            'zip_code': self.zip_code,
+            'city': self.city,
+            'nip_number': self.nip_number,
+            'user_id': self.user_id
+        }

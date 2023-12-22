@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import render_template, redirect, url_for, request, flash
+from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
 from app import db
 from app.models.user import User
 from . import auth
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -22,6 +23,7 @@ def login():
             flash('Nieprawidłowy login lub hasło.', 'danger')
 
     return render_template('auth/login.html')
+
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,6 +46,7 @@ def register():
             flash('E-mail jest już zarejestrowany!', 'danger')
 
     return render_template('auth/register.html')
+
 
 @auth.route('/logout')
 @login_required

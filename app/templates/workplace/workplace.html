@@ -1,0 +1,26 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Workplaces{% endblock %}
+
+{% block content %}
+    <h1>There will be your workplaces, {{ user_name }}!</h1>
+    <div id='workplaces-list'></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/workplaces')
+            .then(response => response.json())
+            .then(workplaces => {
+                const listContainer = document.getElementById('workplaces-list');
+                workplaces.forEach(workplace => {
+                    const item = document.createElement('div');
+                    item.innerHTML = `<strong>${workplace.name}</strong> - ${workplace.street}, ${workplace.city}`;
+                    listContainer.appendChild(item);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+{% endblock %}
