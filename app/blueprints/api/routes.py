@@ -6,6 +6,7 @@ from app.models.worplace import Workplace
 
 
 @api.route('/events')
+@login_required
 def get_events():
     # Fetch or generate event data
     events = [
