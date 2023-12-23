@@ -38,7 +38,7 @@ def create_workplace():
     zip_code = request.json.get('zip_code')
     city = request.json.get('city')
     nip_number = request.json.get('nip_number')
-    user_id = request.json.get('user_id')
+    user_id = current_user.id
 
     # Validate received data as needed
 

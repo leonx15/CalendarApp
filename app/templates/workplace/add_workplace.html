@@ -1,0 +1,51 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Workplaces{% endblock %}
+
+{% block content %}
+    <h1>There you can add workplaces, {{ user_name }}!</h1>
+    <form id="addWorkplaceForm">
+    Name: <input type="text" name="name" required><br>
+    Street: <input type="text" name="street" required><br>
+    House Number: <input type="text" name="house_number" required><br>
+    ZIP Code: <input type="text" name="zip_code" required><br>
+    City: <input type="text" name="city" required><br>
+    NIP Number: <input type="text" name="nip_number" required><br>
+    <input type="submit" value="Add Workplace">
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('addWorkplaceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const jsonData = Object.fromEntries(formData.entries());
+
+        fetch('../api/add_workplace', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include other headers if necessary (e.g., for authentication)
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Handle success
+            window.location.href = '../workplace/';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle errors
+        });
+    });
+</script>
+{% endblock %}
