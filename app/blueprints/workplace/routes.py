@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import render_template, abort
 from flask_login import login_required, current_user
-from app import db
+from app.models.worplace import Workplace
 from . import workplaces
 
 
@@ -10,7 +10,7 @@ def workplaces_view():
     return render_template('workplace/workplace.html', user_name=current_user.user_name)
 
 
-@workplaces.route('/add_workplace', methods=['GET', 'POST'])
+@workplaces.route('/add_workplace', methods=['GET'])
 @login_required
 def add_workplace():
 
