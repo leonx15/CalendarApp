@@ -1,0 +1,20 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Workplaces{% endblock %}
+
+{% block content %}
+    <h1>There you can add workplaces, {{ user_name }}!</h1>
+    <form id="addWorkplaceForm">
+    Name: <input type="text" name="name" required><br>
+    Street: <input type="text" name="street" required><br>
+    House Number: <input type="text" name="house_number" required><br>
+    ZIP Code: <input type="text" name="zip_code" required><br>
+    City: <input type="text" name="city" required><br>
+    NIP Number: <input type="text" name="nip_number" required><br>
+    <input type="submit" value="Add Workplace">
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/workplaces/add_workplace.js') }}"'></script>
+{% endblock %}
