@@ -1,0 +1,20 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Update Workplace{% endblock %}
+
+{% block content %}
+    <h1>Update Workplace, {{ user_name }}!</h1>
+    <form id="updateWorkplaceForm" data-workplace-id="{{ workplace.id }}">
+        Name: <input type="text" name="name" value="{{ workplace.name }}" required><br>
+        Street: <input type="text" name="street" value="{{ workplace.street }}" required><br>
+        House Number: <input type="text" name="house_number" value="{{ workplace.house_number }}" required><br>
+        ZIP Code: <input type="text" name="zip_code" value="{{ workplace.zip_code }}" required><br>
+        City: <input type="text" name="city" value="{{ workplace.city }}" required><br>
+        NIP Number: <input type="text" name="nip_number" value="{{ workplace.nip_number }}" required><br>
+        <input type="submit" value="Update Workplace">
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/workplaces/update_workplace.js') }}"></script>
+{% endblock %}

@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const listContainer = document.getElementById('workplaces-list');
             workplaces.forEach(workplace => {
                 const item = document.createElement('div');
-                item.innerHTML = `<strong>${workplace.name}</strong> - ${workplace.street}, ${workplace.city}`;
+                const editUrl = `/workplace/update/${workplace.id}`;
+                item.innerHTML = `<a href="${editUrl}"><strong>${workplace.name}</strong></a> - ${workplace.street}, ${workplace.city}`;
                 listContainer.appendChild(item);
             });
         })
