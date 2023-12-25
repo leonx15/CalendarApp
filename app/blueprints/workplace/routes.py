@@ -33,4 +33,4 @@ def update_workplace_form(workplace_id):
         abort(403)  # Unauthorized access
 
     # Render the update template with the workplace data
-    return render_template('workplace/update_workplace.html', workplace=workplace, user_name=current_user.id)
+    return render_template('workplace/update_workplace.html', workplace=workplace, user_name=current_user.user_name)
