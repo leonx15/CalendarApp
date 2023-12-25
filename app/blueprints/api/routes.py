@@ -2,7 +2,7 @@ from flask import jsonify, request, abort
 from flask_login import login_required, current_user
 from . import api
 from app import db
-from app.models.worplace import Workplace
+from app.models.workplace import Workplace
 
 
 @api.route('/events')

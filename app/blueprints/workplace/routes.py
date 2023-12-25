@@ -1,6 +1,6 @@
 from flask import render_template, abort, redirect, url_for
 from flask_login import login_required, current_user
-from app.models.worplace import Workplace
+from app.models.workplace import Workplace
 from . import workplaces
 
 
