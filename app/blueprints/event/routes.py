@@ -1,6 +1,5 @@
-from flask import render_template, abort, redirect, url_for
+from flask import render_template
 from flask_login import login_required, current_user
-from app.models.event import Event
 from . import event
 
 
