@@ -49,7 +49,7 @@ def create_event():
         db.session.rollback()
         abort(500, description=str(e))
 
-    return jsonify(new_workplace.to_dict()), 201
+    return jsonify(new_event.to_dict()), 201
 
 
 @api.route('/edit_event/<int:workplace_id>', methods=['PUT'])
