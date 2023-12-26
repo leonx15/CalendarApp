@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(events => {
             const listContainer = document.getElementById('events-list');
-            workplaces.forEach(event => {
+            events.forEach(event => {
                 const item = document.createElement('div');
                 item.innerHTML = `<strong>${event.name}</strong> - ${event.start_date}, ${event.end_date}`;
                 listContainer.appendChild(item);
