@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
 
 {% block head %}
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js''></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 {% endblock %}
 {% block title %}Calendar{% endblock %}
 
@@ -16,7 +16,8 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth', // Sets the initial view to month grid
-            events: '../api/events'
+            events: '../api/events',
+            locale: 'pl'
             // Add other options here
         });
         calendar.render();
