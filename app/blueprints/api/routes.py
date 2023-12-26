@@ -52,6 +52,40 @@ def create_event():
     return jsonify(new_workplace.to_dict()), 201
 
 
+@api.route('/edit_event/<int:workplace_id>', methods=['PUT'])
+@login_required
+def update_event(event_id):
+    if not request.json:
+        abort(400, description="Not a JSON request")
+
+    # Find the workplace by ID
+    event = Event.query.get(event_id)
+    if not event:
+        abort(404, description="Event not found")
+
+    # Check if the current user is authorized to update this workplace
+    if current_user.id != event.user_id:
+        abort(403, description="Unauthorized to update this event")
+
+    # Update fields from the JSON request
+    event.name = request.json.get('name', event.name)
+    event.start_date = request.json.get('start_date', event.start_date)
+    event.end_date = request.json.get('end_date', event.end_date)
+    event.workplace_id = request.json.get('workplace_id', event.workplace_id)
+    # Assume user_id remains the same or is not updated
+
+    # Validate updated data as needed
+
+    # Commit changes to the database
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        abort(500, description=str(e))
+
+    return jsonify(event.to_dict()), 200
+
+
 # WORKPLACE ENDPOINTS
 
 @api.route('/workplaces', methods=['GET'])
