@@ -17,6 +17,13 @@ def get_events():
     events_data = [event.to_dict() for event in user_events]
     return jsonify(events_data)
 
+@api.route('/events_for_calendar')
+@login_required
+def events_for_calendar():
+    # Fetch or generate event data
+    user_events = Event.query.filter_by(user_id=current_user.id).all()
+    events_data = [event.calendar_data() for event in user_events]
+    return jsonify(events_data)
 
 @api.route('/add_event', methods=['POST'])
 @login_required

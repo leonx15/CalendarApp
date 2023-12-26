@@ -25,3 +25,10 @@ class Event(db.Model):
             'workplace_id': self.workplace_id,
             'user_id': self.user_id
         }
+
+    def calendar_data(self):
+        return {
+            'title': self.name,
+            'start': self.start_date.isoformat(),
+            'end': self.end_date.isoformat()
+        }
