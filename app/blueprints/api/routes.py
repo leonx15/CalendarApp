@@ -1,5 +1,6 @@
 from flask import jsonify, request, abort
 from flask_login import login_required, current_user
+from datetime import datetime
 from . import api
 from app import db
 from app.models.workplace import Workplace
@@ -12,11 +13,9 @@ from app.models.event import Event
 @login_required
 def get_events():
     # Fetch or generate event data
-    events = [
-        {'title': 'Event 1', 'start': '2023-12-01'},
-        {'title': 'Event 2', 'start': '2023-12-02'}
-    ]
-    return jsonify(events)
+    user_events = Event.query.filter_by(user_id=current_user.id).all()
+    events_data = [event.to_dict() for event in user_events]
+    return jsonify(events_data)
 
 
 @api.route('/add_event', methods=['POST'])
@@ -31,6 +30,12 @@ def create_event():
     end_date = request.json.get('end_date')
     workplace_id = request.json.get('workplace_id')
     user_id = current_user.id
+
+    try:
+        start_date = datetime.fromisoformat(start_date)
+        end_date = datetime.fromisoformat(end_date)
+    except ValueError:
+        abort(400, description="Invalid date format")
 
     # Validate received data as needed
 

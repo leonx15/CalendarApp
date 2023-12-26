@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/events')
         .then(response => response.json())
-        .then(workplaces => {
+        .then(events => {
             const listContainer = document.getElementById('events-list');
-            workplaces.forEach(workplace => {
+            workplaces.forEach(event => {
                 const item = document.createElement('div');
                 item.innerHTML = `<strong>${event.name}</strong> - ${event.start_date}, ${event.end_date}`;
                 listContainer.appendChild(item);

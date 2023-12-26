@@ -9,3 +9,9 @@ from . import event
 def events_view():
     return render_template('event/event.html', user_name=current_user.user_name)
 
+
+@event.route('/add_event', methods=['GET'])
+@login_required
+def add_event():
+
+    return render_template('event/add_event.html')
