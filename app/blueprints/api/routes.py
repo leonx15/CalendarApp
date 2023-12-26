@@ -3,6 +3,9 @@ from flask_login import login_required, current_user
 from . import api
 from app import db
 from app.models.workplace import Workplace
+from app.models.event import Event
+
+#EVENT ENDPOINTS
 
 
 @api.route('/events')
@@ -14,6 +17,39 @@ def get_events():
         {'title': 'Event 2', 'start': '2023-12-02'}
     ]
     return jsonify(events)
+
+
+@api.route('/add_event', methods=['POST'])
+@login_required
+def create_event():
+    if not request.json:
+        abort(400, description="Not a JSON request")
+
+    # Assuming the JSON contains all the necessary workplace fields
+    name = request.json.get('name')
+    start_date = request.json.get('start_date')
+    end_date = request.json.get('end_date')
+    workplace_id = request.json.get('workplace_id')
+    user_id = current_user.id
+
+    # Validate received data as needed
+
+    new_event = Event(
+        name=name,
+        start_date=start_date,
+        end_date=end_date,
+        workplace_id=workplace_id,
+        user_id=user_id
+    )
+
+    db.session.add(new_event)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        abort(500, description=str(e))
+
+    return jsonify(new_workplace.to_dict()), 201
 
 
 # WORKPLACE ENDPOINTS

@@ -27,12 +27,14 @@ from app.blueprints.main import main as main_blueprint
 from app.blueprints.calendar import calendar as calendar_blueprint
 from app.blueprints.api import api as api_blueprint
 from app.blueprints.workplace import workplaces as workplaces_blueprint
+from app.blueprints.event import event as event_blueprint
 
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(main_blueprint)
 app.register_blueprint(calendar_blueprint, url_prefix='/calendar')
 app.register_blueprint(api_blueprint, url_prefix='/api')
 app.register_blueprint(workplaces_blueprint, url_prefix='/workplace')
+app.register_blueprint(event_blueprint, url_prefix='/event')
 
 
 # Setup the login manager user loader
