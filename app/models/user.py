@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
-from app.models.workplace import Workplace
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'  # Optional: specify a custom table name
@@ -10,7 +9,7 @@ class User(UserMixin, db.Model):
     user_name = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200))
-    event = db.relationship('Event', backref='event', lazy='dynamic')
+    events = db.relationship('Event', backref='event', lazy='dynamic')
     workplace = db.relationship('Workplace', backref='user', lazy='dynamic')
 
     # Additional fields can be added here

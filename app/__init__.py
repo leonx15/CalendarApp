@@ -1,22 +1,25 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 # Initialize the Flask application
 app = Flask(__name__)
 
 # Application Configuration
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userd.db'
 
 # Initialize Extensions
 db = SQLAlchemy(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
+migrate = Migrate(app, db)
 
 # Import models
-from app.models.user import User  # Assuming you have a user model in the models directory
+from app.models.user import User
+from app.models.workplace import Workplace
+from app.models.event import Event
 
 # Import and register Blueprints
 from app.blueprints.auth import auth as auth_blueprint

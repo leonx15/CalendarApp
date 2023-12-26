@@ -1,6 +1,5 @@
 from app import db
 from datetime import datetime
-from flask_login import current_user
 
 class Event(db.Model):
     __tablename__ = 'events'  # Optional: specify a custom table name
