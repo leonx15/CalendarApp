@@ -1,0 +1,18 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Update Event{% endblock %}
+
+{% block content %}
+    <h1>Update Event, {{ user_name }}!</h1>
+    <form id="updateEventForm" data-event-id="{{ event.id }}">
+        Event Name: <input type="text" name="name" value="{{ event.name }}" required><br>
+        Start Date: <input type="datetime-local" name="start_date" value="{{ event.start_date }}" required><br>
+        End Date: <input type="datetime-local" name="end_date" value="{{ event.end_date }}" required><br>
+        Workplace: <select id="workplaceDropdown" name="workplace_id" value="{{ event.workplace_id }}" required></select><br>
+        <input type="submit" value="Update Event">
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/events/update_event.js') }}"></script>
+{% endblock %}

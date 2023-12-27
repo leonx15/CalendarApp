@@ -64,27 +64,41 @@ def create_event():
     return jsonify(new_event.to_dict()), 201
 
 
-@api.route('/edit_event/<int:workplace_id>', methods=['PUT'])
+@api.route('/edit_event/<int:event_id>', methods=['PUT'])
 @login_required
 def update_event(event_id):
     if not request.json:
         abort(400, description="Not a JSON request")
 
-    # Find the workplace by ID
+        # Find the event by ID
     event = Event.query.get(event_id)
     if not event:
         abort(404, description="Event not found")
 
-    # Check if the current user is authorized to update this workplace
+    # Check if the current user is authorized to update this event
     if current_user.id != event.user_id:
         abort(403, description="Unauthorized to update this event")
 
-    # Update fields from the JSON request
+    # Define the date format
+    date_format = "%Y-%m-%dT%H:%M"
+
+    # Update fields from the JSON request with proper date handling
     event.name = request.json.get('name', event.name)
-    event.start_date = request.json.get('start_date', event.start_date)
-    event.end_date = request.json.get('end_date', event.end_date)
+
+    try:
+        if 'start_date' in request.json:
+            event.start_date = datetime.strptime(request.json['start_date'], date_format)
+
+        if 'end_date' in request.json:
+            event.end_date = datetime.strptime(request.json['end_date'], date_format)
+    except ValueError:
+        abort(400, description="Invalid date format")
+
+    # Validate the dates
+    if event.start_date and event.end_date and event.start_date > event.end_date:
+        abort(400, description="Start date must be before end date")
+
     event.workplace_id = request.json.get('workplace_id', event.workplace_id)
-    # Assume user_id remains the same or is not updated
 
     # Validate updated data as needed
 
