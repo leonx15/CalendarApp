@@ -11,6 +11,7 @@
         ZIP Code: <input type="text" name="zip_code" value="{{ workplace.zip_code }}" required><br>
         City: <input type="text" name="city" value="{{ workplace.city }}" required><br>
         NIP Number: <input type="text" name="nip_number" value="{{ workplace.nip_number }}" required><br>
+        Active: <input type="checkbox" name="active" {% if workplace.active %}checked{% endif %}><br>
         <input type="submit" value="Update Workplace">
     </form>
 {% endblock %}

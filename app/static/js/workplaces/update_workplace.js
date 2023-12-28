@@ -3,7 +3,9 @@ document.getElementById('updateWorkplaceForm').addEventListener('submit', functi
 
     const workplaceId = document.getElementById('updateWorkplaceForm').getAttribute('data-workplace-id');
     const formData = new FormData(this);
+    const isActive = this.querySelector('[name="active"]').checked;
     const jsonData = Object.fromEntries(formData.entries());
+    jsonData.active = isActive;
     const url = `/api/edit_workplace/${workplaceId}`;
     const urlBack = `/workplace`;
 

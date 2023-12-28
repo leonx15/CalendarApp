@@ -12,6 +12,7 @@ class Workplace(db.Model):
     city = db.Column(db.String(100), nullable=False)
     nip_number = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    active = db.Column(db.Boolean, default=True)
     events = db.relationship('Event', backref='workplace', lazy='dynamic')
 
     # Additional fields can be added here
@@ -29,5 +30,6 @@ class Workplace(db.Model):
             'city': self.city,
             'nip_number': self.nip_number,
             'user_id': self.user_id,
+            'active': self.active,
             'events': [event.to_dict() for event in self.events]
         }

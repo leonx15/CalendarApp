@@ -183,6 +183,7 @@ def update_workplace(workplace_id):
     workplace.zip_code = request.json.get('zip_code', workplace.zip_code)
     workplace.city = request.json.get('city', workplace.city)
     workplace.nip_number = request.json.get('nip_number', workplace.nip_number)
+    workplace.active = request.json.get('active', workplace.active)
     # Assume user_id remains the same or is not updated
 
     # Validate updated data as needed
