@@ -6,7 +6,8 @@ from app import db
 from app.models.workplace import Workplace
 from app.models.event import Event
 
-#EVENT ENDPOINTS
+
+# EVENT ENDPOINTS
 
 
 @api.route('/events')
@@ -17,6 +18,7 @@ def get_events():
     events_data = [event.to_dict() for event in user_events]
     return jsonify(events_data)
 
+
 @api.route('/events_for_calendar')
 @login_required
 def events_for_calendar():
@@ -24,6 +26,7 @@ def events_for_calendar():
     user_events = Event.query.filter_by(user_id=current_user.id).all()
     events_data = [event.calendar_data() for event in user_events]
     return jsonify(events_data)
+
 
 @api.route('/add_event', methods=['POST'])
 @login_required
@@ -112,6 +115,24 @@ def update_event(event_id):
     return jsonify(event.to_dict()), 200
 
 
+@api.route('/delete_event/<int:event_id>', methods=['DELETE'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # Check if the current user is authorized to delete this event
+    if event.user_id != current_user.id:
+        abort(403)
+
+    db.session.delete(event)
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Event deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        abort(500, description=str(e))
+
+
 # WORKPLACE ENDPOINTS
 
 @api.route('/workplaces', methods=['GET'])
@@ -128,8 +149,6 @@ def get_workplaces():
 def create_workplace():
     if not request.json:
         abort(400, description="Not a JSON request")
-
-    
 
     # Assuming the JSON contains all the necessary workplace fields
     name = request.json.get('name')
@@ -160,6 +179,7 @@ def create_workplace():
         abort(500, description=str(e))
 
     return jsonify(new_workplace.to_dict()), 201
+
 
 @api.route('/edit_workplace/<int:workplace_id>', methods=['PUT'])
 @login_required
