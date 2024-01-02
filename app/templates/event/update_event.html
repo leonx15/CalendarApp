@@ -11,6 +11,7 @@
         Workplace: <select id="workplaceDropdown" name="workplace_id" required></select><br>
         <input type="submit" value="Update Event">
     </form>
+    <button id="deleteEventButton" data-event-id="{{ event.id }}" class="btn btn-danger">Delete Event</button>
 {% endblock %}
 
 {% block scripts %}

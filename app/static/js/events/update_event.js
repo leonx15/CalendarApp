@@ -31,3 +31,21 @@ document.getElementById('updateEventForm').addEventListener('submit', function(e
         // Handle errors
     });
 });
+
+//DELETE EVENT
+document.getElementById('deleteEventButton').addEventListener('click', function() {
+    const eventId = this.getAttribute('data-event-id');
+    if (confirm('Jesteś pewien że chcesz usunąć to wydarzenie? Operacja jest nieodwracalna.')) {
+        fetch("/api/delete_event/" + eventId, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/event'; // Redirect to the events list
+            } else {
+                alert('Error deleting event');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
