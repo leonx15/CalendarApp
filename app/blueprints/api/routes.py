@@ -1,6 +1,7 @@
 from flask import jsonify, request, abort
 from flask_login import login_required, current_user
 from datetime import datetime
+from sqlalchemy import func
 from . import api
 from app import db
 from app.models.workplace import Workplace
@@ -216,3 +217,59 @@ def update_workplace(workplace_id):
         abort(500, description=str(e))
 
     return jsonify(workplace.to_dict()), 200
+
+
+# UTILS ENDPOINTS
+
+@api.route('/workplace-summary', methods=['GET', 'POST'])
+def workplace_summary():
+    now = datetime.now()
+
+    # Handle both GET and POST requests and retrieve the month and year
+    if request.method == 'POST':
+        month = request.form.get('month', type=int, default=now.month)
+        year = request.form.get('year', type=int, default=now.year)
+    else:
+        # GET request: Retrieve month and year from query parameters
+        month = request.args.get('month', default=now.month, type=int)
+        year = request.args.get('year', default=now.year, type=int)
+
+    # Calculate the start and end dates for the given month and year
+    start_date = datetime(year, month, 1)
+    if month == 12:
+        end_date = datetime(year + 1, 1, 1)
+    else:
+        end_date = datetime(year, month + 1, 1)
+
+    # Query for workplaces
+    workplaces = Workplace.query.filter_by(user_id=current_user.id, active=True).all()
+    workplace_summaries = []
+
+    for workplace in workplaces:
+        total_duration_seconds = 0
+        events = Event.query.filter(
+            Event.workplace_id == workplace.id,
+            Event.start_date >= start_date,
+            Event.end_date < end_date
+        ).all()
+
+        for event in events:
+            # Convert start_date and end_date from strings to datetime objects
+            start = event.start_date
+            end = event.end_date
+
+            # Calculate the duration in seconds and add to total
+            duration_seconds = (end - start).total_seconds()
+            total_duration_seconds += duration_seconds
+
+        # Convert total duration from seconds to hours
+        total_duration_hours = total_duration_seconds / 3600
+        workplace_summary = workplace.to_dict()
+        workplace_summary['total_duration_hours'] = total_duration_hours
+        workplace_summaries.append(workplace_summary)
+
+    return jsonify({
+        'workplace_summaries': workplace_summaries,
+        'selected_month': month,
+        'selected_year': year
+    }), 200

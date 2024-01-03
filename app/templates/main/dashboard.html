@@ -3,5 +3,38 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>There is your dasboards, {{ user_name }}!</h1>
+    <h1>There is your dashboard, {{ user_name }}!</h1><br>
+
+    <form id="workplaceSummaryForm">
+        <label for="month">Month:</label>
+        <select name="month" id="month">
+            {% for m in range(1, 13) %}
+            <option value="{{ m }}" {% if m == now.month %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="year">Year:</label>
+        <select name="year" id="year">
+            {% for y in range(now.year-5, now.year+1) %}
+            <option value="{{ y }}" {% if y == now.year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Show Summary">
+    </form>
+
+    <table id="workplaceSummaryTable">
+        <thead>
+            <tr>
+                <th>Workplace Name</th>
+                <th>Total Duration (Hours)</th>
+            </tr>
+        </thead>
+        <tbody id="workplaceSummaryTableBody">
+            <!-- Data rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/workplaces/workplaces_summary.js') }}"></script>
 {% endblock %}

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+from datetime import datetime
 from . import main
 
 
@@ -20,4 +21,5 @@ def secure_area():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('main/dashboard.html', user_name=current_user.user_name)
+    now = datetime.now()
+    return render_template('main/dashboard.html', user_name=current_user.user_name, now=now)
