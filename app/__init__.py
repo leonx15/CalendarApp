@@ -25,6 +25,7 @@ from app.blueprints.calendar import calendar as calendar_blueprint
 from app.blueprints.api import api as api_blueprint
 from app.blueprints.workplace import workplaces as workplaces_blueprint
 
+# Some changes are made
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(main_blueprint)
 app.register_blueprint(calendar_blueprint, url_prefix='/calendar')
